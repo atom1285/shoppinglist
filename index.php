@@ -21,7 +21,9 @@
 </head>
 <body>
 
-    <main class="container center" id="main">
+    <main>
+
+    <div class="container center" id="main">
 
     <h1 id='heading'> Your shopping list </h1>
 
@@ -29,7 +31,7 @@
         // ? rework this with cookies or think of way to make it work with sessions
         if ( isset($_COOKIE['debugMessage']) && !empty($_COOKIE['debugMessage']) ) {
             pre($_COOKIE['debugMessage']);
-        }        
+        } 
     ?>
 
     <ul id="item-list" class="list-group col-sm-6">
@@ -47,12 +49,20 @@
 
     </div>
 
+    </div>
+    
+    <div class="container center">
+
     <?php
 
-    if ( isset($_GET['pass']) && $_GET['pass'] = 4499 ) {
-            include('_partials/debug-div.php');
-        }  
+    if ( isset($_GET['pass']) && $_GET['pass'] == 4499 ) {
+
+        include('_partials/debug-div.php');
+    }  
+
     ?>
+    
+    </div>
 
     </main>
 

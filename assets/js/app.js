@@ -16,26 +16,27 @@ function get_parity(number) {
     return (is_even(number) ? 'even' : 'odd');
 }
 
-console.log(document.cookie);
-
 /**
  * @param {string} cname cookie name 
  * @returns cookie value
  */
 function getCookie(cname) {
-      var name = cname + "=";
-      var decodedCookie = decodeURIComponent(document.cookie);
-      var ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-         c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+        return "";
     }
 
 /**
@@ -44,17 +45,17 @@ function getCookie(cname) {
  * @param {int} exdays days till expiration 
  */
 function setCookie(cname, cvalue, exdays) {
-      const d = new Date();
-      d.setTime(d.getTime() + (exdays*24*60*60*1000));
-      let expires = "expires="+ d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires;
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires;
     }
 
-//TODO: make this work just like the normal pre function in php
-/**
- * 
+/** 
+ * get a random rainbow color, cycles multiple colors 
+ * @returns color
  */
- function preJS() {
+ function getDebugColor() {
     colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
     var x = getCookie('debugPrintAmount');
     x++;
@@ -67,25 +68,25 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 /**
- * 
+ * reads a debug cookie, debug cookie default name 'debug0'
+ * @param {int} messageID 
+ * @returns debug cookie value
  */
 function readDebugCookie(messageID = 0) {
-    console.log(messageID)
-    console.log('debug' + messageID);
     return getCookie('debug' + messageID);
 }
 
-//TODO: move this to debug div js or something like that
-
+/**
+ * function for debug-div, adds the debug cookie to it
+ * @param {int} messageID 
+ */
 function readDebugCookieAndOutput(messageID = 0) {
     var message = readDebugCookie(messageID);
-    var color = preJS();
+    var color = getDebugColor();
 
-    console.log(message);
+    var debugPre = $('<pre class="debugMessage ' + color +'"> ' + message +' </pre>');
 
-    var debugLi = $('<li class="debugMessage ' + color +'"> ' + message +' </li>');
-
-    debugLi.appendTo('#debug-item-list');
+    debugPre.appendTo('#debug-div');
 }
 
 /** adds an item to the html list, if is_new = true, this is a new item and the animation will be done accordingly 
