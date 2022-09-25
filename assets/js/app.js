@@ -21,19 +21,22 @@ function get_parity(number) {
  * @returns cookie value
  */
 function getCookie(cname) {
-      var name = cname + "=";
-      var decodedCookie = decodeURIComponent(document.cookie);
-      var ca = decodedCookie.split(';');
-      for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-         c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+        return "";
     }
 
 /**
@@ -42,10 +45,10 @@ function getCookie(cname) {
  * @param {int} exdays days till expiration 
  */
 function setCookie(cname, cvalue, exdays) {
-      const d = new Date();
-      d.setTime(d.getTime() + (exdays*24*60*60*1000));
-      let expires = "expires="+ d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires;
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires;
     }
 
 /**
@@ -65,13 +68,11 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 /**
- * reads a debug cookie
+ * reads a debug cookie, debug cookie default name 'debug0'
  * @param {int} messageID 
- * @returns cookie value
+ * @returns debug cookie value
  */
 function readDebugCookie(messageID = 0) {
-    console.log(messageID)
-    console.log('debug' + messageID);
     return getCookie('debug' + messageID);
 }
 
@@ -81,9 +82,9 @@ function readDebugCookieAndOutput(messageID = 0) {
 
     console.log(message);
 
-    var debugLi = $('<li class="debugMessage ' + color +'"> ' + message +' </li>');
+    var debugPre = $('<pre class="debugMessage ' + color +'"> ' + message +' </pre>');
 
-    debugLi.appendTo('#debug-item-list');
+    debugPre.appendTo('#debug-div');
 }
 
 /** adds an item to the html list, if is_new = true, this is a new item and the animation will be done accordingly 

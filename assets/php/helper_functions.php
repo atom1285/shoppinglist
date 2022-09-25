@@ -30,8 +30,6 @@ function pre() {
             setcookie('debugPrintAmount', $x, time() + ( 86400 * 3 ));
         }
 
-setcookie('debug0', 'general skywalker', time() + ( 86400 * 0.5 ));
-
 function my_array_push($array) {
 
     $args = func_get_args();
