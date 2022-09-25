@@ -2,9 +2,11 @@
 
     form = $('#add-form');
     clearAddForm();
+    $('#extraTextArea').hide();
 
     form.on('submit', function (event) { 
         event.preventDefault();
+        console.log(form.serialize())
 
         var addreq = $.ajax({
             type: "POST",

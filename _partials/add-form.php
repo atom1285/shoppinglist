@@ -1,7 +1,3 @@
-<?php
-    $_COOKIE['debugMessage'] = 'hello there I am commander Cody';
-?>
-
 <form id="add-form" class="col-sm-6" action="" method="post">
 		<p class="form-group">
             <label>
@@ -24,6 +20,18 @@
                 <option value="g"> Gram </option>
             </select>
         </label>
+        <div class="extra" id="extra">
+
+            <label>
+                Extra info?
+                <input id="extraInfoCheck" class="" type="checkbox" name="extraInfo" id="" onclick="extraInfoChecked()">
+            </label>
+
+            <p class="form-group" id="extraTextArea">
+                <textarea name="extraInfoText" id="extraTextForm" cols="30" rows="3" class="form-control"></textarea>
+            </p>
+
+        </div>
 		<p class="form-group submit-button">
 			<input class="btn-sm btn-danger" type="submit" value="add new item">
 		</p>

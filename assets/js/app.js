@@ -1,6 +1,7 @@
 //// global variables
 var base_api_url = 'http://localhost:8888/octobertest';
 var numberOfItems = 0;
+setCookie('textAreaVisibility', false, 1);
 
 //// functions
 
@@ -93,7 +94,15 @@ function readDebugCookieAndOutput(messageID = 0) {
  */
 function add_item( item, is_new = false) { 
 
-        var buttons = '<button class="tool-btn cmplt-btn glyphicon glyphicon-check" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button> <button class="tool-btn edit-btn glyphicon glyphicon-edit" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button>'
+        if ( item.extraInfo == true) {
+        var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' + 
+                        '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> ' +
+                        '<button class="tool-btn info-btn bi bi-info-square" data-toggle="modal" data-target="#exampleModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '"></button>';
+        }
+        else {
+            var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' +
+                            '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button>'
+        }
         var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id +'">' + item.name + ' ' + item.quantity + item.unit + buttons + '</li>');
 
         if( is_new == false) {
@@ -149,6 +158,10 @@ function itemButtonPress(text_id) {
 
         $('#div-form').load('./_partials/update.php');
     }
+    else if (firstLetter == 'i') {
+        id = text_id.replace('info_', '');
+
+    }
 }
 
 /** resets the page after coming back from updating an item
@@ -194,4 +207,18 @@ function clearAddForm() {
 
     $('#name').val('');
     $('#quantity').val('');
+}
+
+function extraInfoChecked() {
+    textArea = $('#extraTextArea');
+    visibility = getCookie('textAreaVisibility');
+
+    if ( visibility == 'false') {
+        textArea.show();
+        setCookie('textAreaVisibility', true, 1);
+    }
+    else {
+        textArea.hide();
+        setCookie('textAreaVisibility', false, 1);
+    }
 }
