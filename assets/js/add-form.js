@@ -11,7 +11,7 @@
             url: base_api_url + "/api/sl/add",
             data: form.serialize(),
             success: function (response) {           
-                add_item(response, true)
+                add_item(response.data, true);
             }
         });
     });

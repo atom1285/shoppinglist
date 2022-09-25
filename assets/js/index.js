@@ -5,7 +5,7 @@
         url: base_api_url + "/api/sl/get/nc",
         success: function (response) {
 
-            response.forEach( item => {
+            response.data.forEach( item => {
                 add_item(item);
             });
 

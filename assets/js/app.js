@@ -16,8 +16,6 @@ function get_parity(number) {
     return (is_even(number) ? 'even' : 'odd');
 }
 
-console.log(document.cookie);
-
 /**
  * @param {string} cname cookie name 
  * @returns cookie value
@@ -50,11 +48,11 @@ function setCookie(cname, cvalue, exdays) {
       document.cookie = cname + "=" + cvalue + ";" + expires;
     }
 
-//TODO: make this work just like the normal pre function in php
 /**
- * 
- */
- function preJS() {
+ *  random debug color
+ * @returns color name as string
+ */    
+ function randomDebugColor() {
     colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
     var x = getCookie('debugPrintAmount');
     x++;
@@ -67,7 +65,9 @@ function setCookie(cname, cvalue, exdays) {
 }
 
 /**
- * 
+ * reads a debug cookie
+ * @param {int} messageID 
+ * @returns cookie value
  */
 function readDebugCookie(messageID = 0) {
     console.log(messageID)
@@ -75,11 +75,9 @@ function readDebugCookie(messageID = 0) {
     return getCookie('debug' + messageID);
 }
 
-//TODO: move this to debug div js or something like that
-
 function readDebugCookieAndOutput(messageID = 0) {
     var message = readDebugCookie(messageID);
-    var color = preJS();
+    var color = randomDebugColor();
 
     console.log(message);
 
@@ -160,7 +158,7 @@ function backFromUpdate() {
     $('#update-form').remove();
 
     $('#heading').text('Your shopping list');
-    $('#div-form').load('./_partials/add-form.html');
+    $('#div-form').load('./_partials/add-form.php');
   }
 
 /** updates item html

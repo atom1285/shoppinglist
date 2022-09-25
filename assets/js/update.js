@@ -4,9 +4,9 @@ $.ajax({
     type: "get",
     url: getIdUrl,
     success: function (response) {
-        $('#name').val(response.name);
-        $('#quantity').val(response.quantity);
-        $('#unit').val(response.unit);
+        $('#name').val(response.data.name);
+        $('#quantity').val(response.data.quantity);
+        $('#unit').val(response.data.unit);
     }
 });
 
@@ -24,7 +24,7 @@ updateForm.on('submit', function (event) {
         success: function (response) {
 
             $('#update-form').remove();
-            updateItemHTML(response);
+            updateItemHTML(response.data);
             backFromUpdate();
 
         }
