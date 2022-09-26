@@ -6,7 +6,7 @@
         success: function (response) {
 
             response.data.forEach( item => {
-                add_item(item);
+                addItemToList(item);
             });
 
         }

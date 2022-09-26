@@ -92,12 +92,12 @@ function readDebugCookieAndOutput(messageID = 0) {
  * @param {JSON} item
  * @param {bool} is_new (default = false)
  */
-function add_item( item, is_new = false) { 
+function addItemToList( item, is_new = false) { 
 
         if ( item.extraInfo == true) {
-        var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' + 
-                        '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> ' +
-                        '<button class="tool-btn info-btn bi bi-info-square" data-toggle="modal" data-target="#exampleModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '"></button>';
+            var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' + 
+                            '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> ' +
+                            '<button class="tool-btn info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
         }
         else {
             var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' +
@@ -153,13 +153,23 @@ function itemButtonPress(text_id) {
         updateItemId = text_id.replace("edit_", "");
 
         $('#heading').text('Update item');
-        $('#add-form').toggle();
+        // $('#add-form').toggle();
         $('#item-list').toggle();
 
         $('#div-form').load('./_partials/update.php');
     }
     else if (firstLetter == 'i') {
         id = text_id.replace('info_', '');
+        my_url = base_api_url + '/api/sl/get/id/' + id;
+
+        $.ajax({
+            type: "GET",
+            url: my_url,
+            success: function (response) {
+                var text = response.data.name + ' ' + response.data.quantity + response.data.unit + ': ' + response.data.extraInfoText;
+                $('#modalText').text(text); 
+            }
+        });
 
     }
 }
@@ -172,7 +182,8 @@ function backFromUpdate() {
     $('#update-form').remove();
 
     $('#heading').text('Your shopping list');
-    $('#div-form').load('./_partials/add-form.php');
+
+    $('#div-form').load('./_partials/form.php');
   }
 
 /** updates item html
@@ -180,7 +191,15 @@ function backFromUpdate() {
  */
 function updateItemHTML(APIResponse) {
 
-    var buttons = '<button class="tool-btn cmplt-btn glyphicon glyphicon-check" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button> <button class="tool-btn edit-btn glyphicon glyphicon-check" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button>'
+    if ( APIResponse.extraInfo == true) {
+        var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button>' + 
+                        '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button> ' +
+                        '<button class="tool-btn info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + APIResponse.id + '"></button>';
+    }
+    else {
+        var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button>' +
+                        '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button>'
+    }
 
     //basically just setting item's css and html
     item = $('#item_' + APIResponse.id).text(APIResponse.name + ' ' + APIResponse.quantity + APIResponse.unit);
@@ -207,6 +226,7 @@ function clearAddForm() {
 
     $('#name').val('');
     $('#quantity').val('');
+    $('#extraTextForm').val('');
 }
 
 function extraInfoChecked() {
@@ -219,6 +239,7 @@ function extraInfoChecked() {
     }
     else {
         textArea.hide();
+        $('#extraTextForm').val('');
         setCookie('textAreaVisibility', false, 1);
     }
 }

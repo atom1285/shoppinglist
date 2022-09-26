@@ -1,16 +1,28 @@
 body {
 	color: #FFFFFF;
-	background-color: #303030;
+	background-color: #222222;
 }
 
-.center {
+.container {
 	margin: auto;
-	width: 60%;
-	padding: 10px;
+	padding: 18px;
 }
 
 #add-form {
-	width: 230px;
+	position: relative;
+	padding: 15px;
+}
+
+.extra {
+	padding: 15px 0;
+}
+
+.extra label {
+	padding: 3px 0;
+} 
+
+.modal {
+	color:#222222;
 }
 
 #back-btn {
@@ -31,7 +43,6 @@ body {
 	height: 24px;
 	padding: 1px 10px;
 	transition: 0.5s;
-	color: greenyellow !important;
 }
 
 .btn-sm {
@@ -84,6 +95,10 @@ body {
 	color: greenyellow;	
 }
 
+.info-btn {
+	color: white;
+}
+
 .controls a {
 	font-size: 13px;
 	margin-left: 8px;
@@ -92,6 +107,15 @@ body {
 
 label{
 	transition: 1.5s;
+	margin: 0 8px;
+}
+
+.entry {
+	margin: 4px -6px;
+}
+
+h1 {
+	margin: 15px 0;
 }
 
 /*? form inputs hover?
@@ -133,6 +157,7 @@ body > .alert {
 
 .yellow {
 	background-color: yellow;
+	color: #2c2c2c;
 }
 
 .blue {

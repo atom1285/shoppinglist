@@ -7,6 +7,14 @@ $.ajax({
         $('#name').val(response.data.name);
         $('#quantity').val(response.data.quantity);
         $('#unit').val(response.data.unit);
+
+        if (response.data.extraInfo == true) {
+            console.log(response.data);
+            $('#extraTextArea').val(response.data)
+        }   
+        else {
+            $('#extraTextArea').hide();
+        }
     }
 });
 
