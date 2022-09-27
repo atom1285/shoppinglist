@@ -89,6 +89,20 @@ function readDebugCookieAndOutput(messageID = 0) {
     debugPre.appendTo('#debug-div');
 }
 
+function makeButtons(item, extraInfo) {
+    var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' + 
+                    '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> ';
+
+    if (extraInfo == true) {
+        var info_btn = '<button class="info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
+        return [buttons, info_btn];
+    }
+    else {
+        return [buttons];
+    }
+
+}
+
 /** adds an item to the html list, if is_new = true, this is a new item and the animation will be done accordingly 
  * @param {JSON} item
  * @param {bool} is_new (default = false)
@@ -96,19 +110,14 @@ function readDebugCookieAndOutput(messageID = 0) {
 function addItemToList( item, is_new = false) { 
 
         if ( item.extraInfo == true) {
-            var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' + 
-                            '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> '
-
-            var info_btn = '<button class="info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
+            buttons = makeButtons(item, true);
             var data = ' data-sl-extraInfo = "true" data-sl-extraInfoText="' + item.extraInfoText + ' " ';
 
-            var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id + '" ' + data + '><label>' + item.name + ' ' + item.quantity + item.unit + info_btn + '</label>' + buttons + '</li>');
+            var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id + '" ' + data + '> <label>' + item.name + ' ' + item.quantity + item.unit + buttons[1] + '</label>' + buttons[0] + '</li>');
         }
         else {
-            var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' +
-                            '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button>'
-                            
-            var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id +'">' + item.name + ' ' + item.quantity + item.unit + buttons + '</li>');
+            var buttons = makeButtons(item, false);
+            var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id +'">' + item.name + ' ' + item.quantity + item.unit + buttons[0] + '</li>');
         }
         
 
@@ -194,39 +203,40 @@ function backFromUpdate() {
   }
 
 /** updates item html
- * @param {JSON} APIResponse 
+ * @param {JSON} item 
  */
-function updateItemHTML(APIResponse) {
+function updateItemHTML(item) {
 
     //basically just setting item's css and html
-    item = '#item_' + APIResponse.id;
-    $(item).text(APIResponse.name + ' ' + APIResponse.quantity + APIResponse.unit);
+    var itemID = '#item_' + item.id;
+    var text = item.name + ' ' + item.quantity + item.unit;
 
-    if ( APIResponse.extraInfo == true) {
-        var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button>' + 
-                        '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button> ' +
-                        '<button class="info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + APIResponse.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
-        // var data = ' data-sl-extraInfo = "true" data-sl-extraInfoText="' + APIResponse.extraInfoText + ' " ';
+    if ( item.extraInfo == true) {
 
-        $(item).attr('data-sl-extraInfo', "true");
-        $(item).attr('data-sl-extraInfoText', APIResponse.extraInfoText);
+        buttons = makeButtons(item, true)
+
+        $(itemID).html('<label>' + text + buttons[1] + '</label>' + buttons[0]);
+
+        $(itemID).attr('data-sl-extraInfo', "true");
+        $(itemID).attr('data-sl-extraInfoText', item.extraInfoText);
     }
     else {
-        var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button>' +
-                        '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button>'
+        
+        buttons = makeButtons(item, false);
+        $(itemID).html(text + buttons[0])
     }
 
-    color = $(item).css( "background-color" );
+    color = $(itemID).css( "background-color" );
 
-    $(item).append(buttons)
+    $(itemID) //.append(buttons)
         .css({ backgroundColor: 'orange' })
         .delay(100)
         .animate({ backgroundColor: color })
         .mouseenter( function() {
-            $(item).css("background", "#555353");
+            $(itemID).css("background", "#555353");
         })
         .mouseleave( function() {
-            $(item).css("background", color);
+            $(itemID).css("background", color);
         });
     
     $('#heading').text('Your shopping list');
@@ -245,19 +255,36 @@ function clearModalText() {
     $('#modalText').text(''); 
 }
 
-function extraInfoChecked() {
+/**
+ * is called when extraInfo checkbox is pressed
+ * @param {bool} override Overides the function
+ * @param {bool} overrideType If true, text area will be turned on, if alse textarea will be turned off
+ */
+function extraInfoChecked(override = false, overrideType = false) {
     textArea = $('#extraTextArea');
-    // visibility = getCookie('textAreaVisibility');
 
-    if ( visibility == false) {
-        textArea.show();
-        visibility = true;
-        // setCookie('textAreaVisibility', true, 1);
+    if (override == true) {
+        if (overrideType == true) {
+            textArea.show();
+            $('#extraInfoCheck').prop('checked', true);
+            visibility = true;
+        }
+        else {
+            textArea.hide();
+            $('#extraInfoCheck').prop('checked', false);
+            $('#extraTextForm').val('');
+            visibility = false;
+        }
     }
     else {
-        textArea.hide();
-        $('#extraTextForm').val('');
-        visibility = false;
-        // setCookie('textAreaVisibility', false, 1);
+        if ( visibility == false) {
+            textArea.show();
+            visibility = true;
+        }
+        else {
+            textArea.hide();
+            $('#extraTextForm').val('');
+            visibility = false;
+        }
     }
 }

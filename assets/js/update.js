@@ -9,10 +9,10 @@ $.ajax({
         $('#unit').val(response.data.unit);
 
         if (response.data.extraInfo != true) {
-            $('#extraTextArea').hide();
+            extraInfoChecked(true, false)
         }
         else {
-            $("#extraInfoCheck").prop('checked', true);
+            extraInfoChecked(true, true);
         }
     }
 });

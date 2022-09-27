@@ -63,7 +63,7 @@
 
         </div>
 		<p class="form-group submit-button">
-			<input class="btn-sm btn btn-danger" type="submit" value="<?= $button_value ?>">
+			<input class="btn-sm btn btn-danger btn-submit" type="submit" value="<?= $button_value ?>">
 		</p>
     </form>
 

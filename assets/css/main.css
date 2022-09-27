@@ -89,11 +89,11 @@ body {
 	background-color: #555353;
 }
 
-.btn-sm {
+.btn-submit {
 	transition: 0.5s;
 }
 
-.btn-sm:hover {
+.btn-submit:hover {
 	font-size: 15px;
 }
 
