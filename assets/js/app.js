@@ -1,7 +1,8 @@
 //// global variables
 var base_api_url = 'http://localhost:8888/octobertest';
 var numberOfItems = 0;
-setCookie('textAreaVisibility', false, 1);
+// setCookie('textAreaVisibility', false, 1);
+var visibility = false;
 
 //// functions
 
@@ -163,14 +164,13 @@ function itemButtonPress(text_id) {
         $('#item-list').toggle();
 
         if ( $('#item_' + updateItemId).attr('data-sl-extraInfo') == 'true' ) {
-            setCookie('textAreaText', $('#item_' + updateItemId).attr('data-sl-extraInfoText') , 1);
-            console.log('yes I am here')
+            $('#div-form').load('./_partials/form.php/?form_type=edit&textAreaText=' + $('#item_' + updateItemId).attr('data-sl-extraInfoText'));
         }
         else {
-            setCookie('textAreaText', ' ' , 1);
+            $('#div-form').load('./_partials/form.php/?form_type=edit&textAreaText=nothing');
         }
         
-        $('#div-form').load('./_partials/update.php');
+        
     }
     else if (firstLetter == 'i') {
         id = text_id.replace('info_', '');
@@ -198,22 +198,27 @@ function backFromUpdate() {
  */
 function updateItemHTML(APIResponse) {
 
+    //basically just setting item's css and html
+    item = '#item_' + APIResponse.id;
+    $(item).text(APIResponse.name + ' ' + APIResponse.quantity + APIResponse.unit);
+
     if ( APIResponse.extraInfo == true) {
         var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button>' + 
                         '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button> ' +
-                        '<button class="tool-btn info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + APIResponse.id + '"></button>';
+                        '<button class="info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + APIResponse.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
+        // var data = ' data-sl-extraInfo = "true" data-sl-extraInfoText="' + APIResponse.extraInfoText + ' " ';
+
+        $(item).attr('data-sl-extraInfo', "true");
+        $(item).attr('data-sl-extraInfoText', APIResponse.extraInfoText);
     }
     else {
         var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + APIResponse.id + '"></button>' +
                         '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + APIResponse.id + '"></button>'
     }
 
-    //basically just setting item's css and html
-    item = $('#item_' + APIResponse.id).text(APIResponse.name + ' ' + APIResponse.quantity + APIResponse.unit);
+    color = $(item).css( "background-color" );
 
-    color = item.css( "background-color" );
-
-    item.append(buttons)
+    $(item).append(buttons)
         .css({ backgroundColor: 'orange' })
         .delay(100)
         .animate({ backgroundColor: color })
@@ -242,15 +247,17 @@ function clearModalText() {
 
 function extraInfoChecked() {
     textArea = $('#extraTextArea');
-    visibility = getCookie('textAreaVisibility');
+    // visibility = getCookie('textAreaVisibility');
 
-    if ( visibility == 'false') {
+    if ( visibility == false) {
         textArea.show();
-        setCookie('textAreaVisibility', true, 1);
+        visibility = true;
+        // setCookie('textAreaVisibility', true, 1);
     }
     else {
         textArea.hide();
         $('#extraTextForm').val('');
-        setCookie('textAreaVisibility', false, 1);
+        visibility = false;
+        // setCookie('textAreaVisibility', false, 1);
     }
 }

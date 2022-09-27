@@ -11,6 +11,9 @@ $.ajax({
         if (response.data.extraInfo != true) {
             $('#extraTextArea').hide();
         }
+        else {
+            $("#extraInfoCheck").prop('checked', true);
+        }
     }
 });
 
@@ -18,7 +21,6 @@ var updateForm = $('#update-form');
 
 updateForm.on('submit', function (event) { 
     event.preventDefault();
-    console.log(updateForm.serialize());
 
     updtUrl = base_api_url + "/api/sl/updt/" + updateItemId;
 
@@ -32,6 +34,10 @@ updateForm.on('submit', function (event) {
             updateItemHTML(response.data);
             backFromUpdate();
 
+            if (response.data.extraInfo == true) {
+                // setCookie('textAreaVisibility', false, 1);
+                visibility = false;
+            }
         }
     });
     

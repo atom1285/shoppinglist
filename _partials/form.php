@@ -1,9 +1,10 @@
 <?php 
 
-    $form_type = basename($_SERVER['SCRIPT_NAME'], '.php'); 
+    $form_type = $_GET['form_type'];
 
-    if ($form_type == 'update') {
+    if ($form_type == 'edit') {
 
+        $form_type = 'update';
         $script_type = 'update';
         $placeholder = false;
         $button_value = 'update item';
@@ -23,7 +24,7 @@
 
         <?php
             if ($form_type == 'update') {
-                echo '<a href="#" class="btn btn-sm btn-danger back bi bi-backspace " id="back-btn" onclick="backFromUpdate()"></a>';
+                echo '<a href="#" class="btn btn-sm back bi bi-backspace " id="back-btn" onclick="backFromUpdate()"></a>';
             }
         ?>
 
@@ -56,7 +57,8 @@
             </label>
 
             <p class="form-group" id="extraTextArea">
-                <textarea name="extraInfoText" id="extraTextForm" cols="30" rows="3" class="form-control"> <?php echo $_COOKIE['extraInfoText'] ?> </textarea>
+                <textarea name="extraInfoText" id="extraTextForm" cols="30" rows="3" class="form-control"><?php if ( $_GET['textAreaText'] != 'nothing' ) {echo $_GET['textAreaText'];}?>
+                </textarea>
             </p>
 
         </div>
