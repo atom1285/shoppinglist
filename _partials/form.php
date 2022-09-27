@@ -20,6 +20,13 @@
 
 
 <form id="<?= $form_type?>-form" class="col col-sm-6" action="" method="post">
+
+        <?php
+            if ($form_type == 'update') {
+                echo '<a href="#" class="btn btn-sm btn-danger back bi bi-backspace " id="back-btn" onclick="backFromUpdate()"></a>';
+            }
+        ?>
+
 		<p class="form-group">
             <label>
                 Name
@@ -49,7 +56,7 @@
             </label>
 
             <p class="form-group" id="extraTextArea">
-                <textarea name="extraInfoText" id="extraTextForm" cols="30" rows="3" class="form-control"></textarea>
+                <textarea name="extraInfoText" id="extraTextForm" cols="30" rows="3" class="form-control"> <?php echo $_COOKIE['extraInfoText'] ?> </textarea>
             </p>
 
         </div>

@@ -35,6 +35,10 @@ body {
 	color: black;
 }
 
+.list-group-item:hover label {
+	cursor: pointer;
+}
+
 .tool-btn  {
 	background-color: #303030;
 	border: none;
@@ -45,16 +49,52 @@ body {
 	transition: 0.5s;
 }
 
+.even-item button{
+	background-color: #2c2c2c;
+}
+
+.list-group-item .tool-btn{
+	transition: 1s;
+}
+
+.list-group-item:hover .tool-btn {
+	background-color: #555353;
+}
+
+.tool-btn:hover {
+	font-size: 25px;
+}
+
+.edit-btn {
+	color: orange;
+}
+
+.cmplt-btn {
+	color: greenyellow;	
+}
+
+.info-btn {
+	background-color: #303030;
+	border: none;
+	/* float: ; */
+	text-align: center;
+	height: 24px;
+	padding: 1px 10px;
+	transition: 0.5s;
+	color: white;
+	/* display: block; */
+}
+
+.list-group-item:hover .info-btn {
+	background-color: #555353;
+}
+
 .btn-sm {
 	transition: 0.5s;
 }
 
 .btn-sm:hover {
 	font-size: 15px;
-}
-
-.tool-btn:hover {
-	font-size: 25px;
 }
 
 .list-group-item {
@@ -69,16 +109,6 @@ body {
 	padding-left: 30px;
 }
 
-.list-group-item .tool-btn{
-	display: none;
-	transition: 1s;
-}
-
-.list-group-item:hover .tool-btn {
-	display: block;
-	background-color: #555353;
-}
-
 .debugMessage {
 	text-decoration: none;
 }
@@ -87,25 +117,13 @@ body {
 	list-style-type: none;
 }
 
-.edit-btn {
-	color: orange;
-}
-
-.cmplt-btn {
-	color: greenyellow;	
-}
-
-.info-btn {
-	color: white;
-}
-
 .controls a {
 	font-size: 13px;
 	margin-left: 8px;
 	text-decoration: none;
 }
 
-label{
+.div-form label{
 	transition: 1.5s;
 	margin: 0 8px;
 }

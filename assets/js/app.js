@@ -96,14 +96,20 @@ function addItemToList( item, is_new = false) {
 
         if ( item.extraInfo == true) {
             var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' + 
-                            '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> ' +
-                            '<button class="tool-btn info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
+                            '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button> '
+
+            var info_btn = '<button class="info-btn bi bi-info-square" data-toggle="modal" data-target="#InfoModal" onclick="itemButtonPress(this.id)" id="info_' + item.id + '" data-bs-toggle="modal" data-bs-target="#InfoModal"></button>';
+            var data = ' data-sl-extraInfo = "true" data-sl-extraInfoText="' + item.extraInfoText + ' " ';
+
+            var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id + '" ' + data + '><label>' + item.name + ' ' + item.quantity + item.unit + info_btn + '</label>' + buttons + '</li>');
         }
         else {
             var buttons =   '<button class="tool-btn cmplt-btn bi bi-check2-circle" onclick="itemButtonPress(this.id)" id="tick_' + item.id + '"></button>' +
                             '<button class="tool-btn edit-btn bi bi-pencil-square" onclick="itemButtonPress(this.id)" id="edit_' + item.id + '"></button>'
+                            
+            var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id +'">' + item.name + ' ' + item.quantity + item.unit + buttons + '</li>');
         }
-        var li = $('<li class="list-group-item ' + get_parity(numberOfItems + 1) + '-item" id="' + 'item_' + item.id +'">' + item.name + ' ' + item.quantity + item.unit + buttons + '</li>');
+        
 
         if( is_new == false) {
             li.hide()
@@ -156,21 +162,22 @@ function itemButtonPress(text_id) {
         // $('#add-form').toggle();
         $('#item-list').toggle();
 
+        if ( $('#item_' + updateItemId).attr('data-sl-extraInfo') == 'true' ) {
+            setCookie('textAreaText', $('#item_' + updateItemId).attr('data-sl-extraInfoText') , 1);
+            console.log('yes I am here')
+        }
+        else {
+            setCookie('textAreaText', ' ' , 1);
+        }
+        
         $('#div-form').load('./_partials/update.php');
     }
     else if (firstLetter == 'i') {
         id = text_id.replace('info_', '');
         my_url = base_api_url + '/api/sl/get/id/' + id;
 
-        $.ajax({
-            type: "GET",
-            url: my_url,
-            success: function (response) {
-                var text = response.data.name + ' ' + response.data.quantity + response.data.unit + ': ' + response.data.extraInfoText;
-                $('#modalText').text(text); 
-            }
-        });
-
+        $('#InfoModalLabel').text( $('#item_' + id).text() );
+        $('#modalText').text( $('#item_' + id).attr('data-sl-extraInfoText') );
     }
 }
 
@@ -227,6 +234,10 @@ function clearAddForm() {
     $('#name').val('');
     $('#quantity').val('');
     $('#extraTextForm').val('');
+}
+
+function clearModalText() {
+    $('#modalText').text(''); 
 }
 
 function extraInfoChecked() {

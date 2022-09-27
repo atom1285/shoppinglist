@@ -8,11 +8,7 @@ $.ajax({
         $('#quantity').val(response.data.quantity);
         $('#unit').val(response.data.unit);
 
-        if (response.data.extraInfo == true) {
-            console.log(response.data);
-            $('#extraTextArea').val(response.data)
-        }   
-        else {
+        if (response.data.extraInfo != true) {
             $('#extraTextArea').hide();
         }
     }
@@ -22,6 +18,7 @@ var updateForm = $('#update-form');
 
 updateForm.on('submit', function (event) { 
     event.preventDefault();
+    console.log(updateForm.serialize());
 
     updtUrl = base_api_url + "/api/sl/updt/" + updateItemId;
 
